@@ -40,7 +40,7 @@ const forms = () => {
     // Замена статичного имени отправляемого файла
     upload.forEach(item => {
         item.addEventListener('input', () => {
-            console.log(item.files[0]);
+            console.log(item.files[0]); // получаем имя загружаемого файла
             // проверка на количество символов в имени файла
             let dots;
             // Оптимизация повторяемых участков
@@ -69,7 +69,7 @@ const forms = () => {
 
             // Делаем форму прозрачной
             item.classList.add('animated', 'fadeOutUp');
-            // Через 400 мс исчезнет со страницы
+            // Через 400 мс она исчезнет со страницы
             setTimeout(() => {
                 item.style.display = 'none';
             }, 400);
