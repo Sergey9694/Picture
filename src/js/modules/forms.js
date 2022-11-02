@@ -1,6 +1,6 @@
 import { postData } from "../services/requests";
 
-const forms = () => {
+const forms = (state) => {
     const form = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
           upload = document.querySelectorAll('[name="upload"]');
@@ -31,6 +31,19 @@ const forms = () => {
             item.previousElementSibling.textContent = 'Файл не выбран';
         });
     };
+    // Очистка объекта
+    const clearState = (state) => {
+        for (let key of Object.keys(state)) {
+            delete state[key];
+        }
+        document.querySelectorAll('.calc select').forEach(select => {
+            select.value = '';
+        });
+
+        document.querySelector('.calc-price').textContent = 'Для расчета нужно выбрать размер картины и материал картины';
+
+    };
+
     // Замена статичного имени отправляемого файла
     upload.forEach(item => {
         item.addEventListener('input', () => {
@@ -76,6 +89,12 @@ const forms = () => {
 
             // Сбор данных из формы
             const formData = new FormData(item);
+            // Добавили сбор данных из формы calc
+            if (item.getAttribute('data-calc') === 'end') {
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
             // Переменная для формирования динамического пути отправки
             let api;
             // Ищем блок '.popup-design' в родителях
@@ -94,6 +113,7 @@ const forms = () => {
                 })
                 .finally(() => {
                     clearInputs();
+                    clearState(state);
                     setTimeout(() => {
                         statusMessage.remove();
                         // Возвращаем скрытую выше форму назад, после отправки данных
